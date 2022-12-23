@@ -79,16 +79,3 @@ resource "aws_security_group" "mk77-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
-
-# ---------------------------
-# EC2 Key pair
-# ---------------------------
-variable "key_name" {
-  default = "mk77-keypair"
-}
-
-# 秘密鍵のアルゴリズム設定
-resource "tls_private_key" "mk77-private-key" {
-  algorithm = "RSA"
-  rsa_bits  = 2048
-}
