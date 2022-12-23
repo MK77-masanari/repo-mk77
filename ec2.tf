@@ -66,13 +66,17 @@ output "public_key_openssh" {
 # EC2
 # ---------------------------
 # Amazon Linux 2 の最新版AMIを取得
-data "aws_ssm_parameter" "amzn2_linux_ami" {
-  name = "/aws/service/ami-0f4e7c835783812e0"
+provider aws {
+  region = "ap-northeast-3"
+}
+
+data aws_ssm_parameter amzn2_ami {
+  name = "/aws/service/ami-amazon-linux-latest/ami-009a12cc1b7171e6e"
 }
 
 # EC2作成
 resource "aws_instance" "mk77_ec2"{
-  ami                         = data.aws_ssm_parameter.amzn2_linux_ami.value
+  ami                         = data.aws_ssm_parameter.amzn2_ami.value
   instance_type               = "t2.micro"
   availability_zone           = "ap-northeast-3a"
   vpc_security_group_ids      = [aws_security_group.mk77-sg.id]
