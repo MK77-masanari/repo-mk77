@@ -8,8 +8,8 @@ variable "key_name" {
 # キーファイル
 ## 生成場所のPATH指定をしたければ、ここを変更するとよい。
 locals {
-  public_key_file  = "C:\\C:\work\\${var.key_name}.id_rsa.pub"
-  private_key_file = "C:\\C:\work\\${var.key_name}.id_rsa"
+  public_key_file  = "C:\\work\\${var.key_name}.id_rsa.pub"
+  private_key_file = "C:\\work\\${var.key_name}.id_rsa"
 }
 
 # キーペアを作る
