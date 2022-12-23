@@ -1,33 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Codespaces
-Marketplace
-Explore
- 
-@MK77-masanari 
-team-buta
-/
-VPC-test
-Internal
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-VPC-test/kiriyama.tf
-@MK77-masanari
-MK77-masanari etc vpc-name chenge
-Latest commit 6a45091 1 hour ago
- History
- 1 contributor
-110 lines (100 sloc)  2.56 KB
-
 # ---------------------------
 # vpc
 # ---------------------------
@@ -138,18 +108,3 @@ resource "aws_instance" "mk77_ec2"{
     Name = "mk77_ec2"
   }
 }
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-VPC-test/kiriyama.tf at kiriyama · team-buta/VPC-test
