@@ -1,7 +1,5 @@
 #変数
 variable "key_name" {
-  type        = "string"
-  description = "keypair name"
   default    = "mk77-key" # キー名を固定したかったらdefault指定。指定なしならインタラクティブにキー入力して決定。
 }
 
