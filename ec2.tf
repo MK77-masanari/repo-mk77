@@ -15,8 +15,8 @@ resource "tls_private_key" "mk77-keypair-private-key" {
 # - Windowsの場合はフォルダを"\\"で区切る（エスケープする必要がある）
 # - [terraform apply] 実行後はクライアントPCの公開鍵は自動削除される
 locals {
-  public_key_file  = "C:\\C:\work\\${var.key_name}.id_rsa.pub"
-  private_key_file = "C:\\C:\work\\${var.key_name}.id_rsa"
+  public_key_file  = "C:\\work\\${var.key_name}.id_rsa.pub"
+  private_key_file = "C:\\work\\${var.key_name}.id_rsa"
 }
 
 resource "local_file" "mk77-private-key-pem" {
