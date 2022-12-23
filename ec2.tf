@@ -1,40 +1,74 @@
-# ---------------------------
-# EC2 Key pair
-# ---------------------------
+#変数
 variable "key_name" {
-  default = "mk77-keypair"
+  type        = "string"
+  description = "keypair name"
+  default    = "mk77-key" # キー名を固定したかったらdefault指定。指定なしならインタラクティブにキー入力して決定。
 }
 
-# 秘密鍵のアルゴリズム設定
-resource "tls_private_key" "mk77-keypair-private-key" {
+# キーファイル
+## 生成場所のPATH指定をしたければ、ここを変更するとよい。
+locals {
+  public_key_file  = "C:\\C:\work\\${var.key_name}.id_rsa.pub"
+  private_key_file = "C:\\C:\work\\${var.key_name}.id_rsa"
+}
+
+# キーペアを作る
+resource "tls_private_key" "mk77-keypair" {
   algorithm = "RSA"
   rsa_bits  = 2048
 }
 
-# クライアントPCにKey pair（秘密鍵と公開鍵）を作成
-# - Windowsの場合はフォルダを"\\"で区切る（エスケープする必要がある）
-# - [terraform apply] 実行後はクライアントPCの公開鍵は自動削除される
-locals {
-  public_key_file  = "C:\\work\\${var.key_name}.id_rsa.pub"
-  private_key_file = "C:\\work\\${var.key_name}.id_rsa"
-}
-
-resource "local_file" "mk77-private-key-pem" {
+# 秘密鍵ファイルを作る
+resource "local_file" "mk77-private_key_pem" {
   filename = "${local.private_key_file}"
-  content  = "${tls_private_key.mk77_private_key.private_key_pem}"
+  content  = "${tls_private_key.mk77-keypair.private_key_pem}"
+
+  # local_fileでファイルを作ると実行権限が付与されてしまうので、local-execでchmodしておく。
+  provisioner "local-exec" {
+    command = "chmod 600 ${local.private_key_file}"
+  }
 }
 
-# 上記で作成した公開鍵をAWSのKey pairにインポート
-resource "aws_key_pair" "mk77_keypair" {
-  key_name   = "${var.key_name}"
-  public_key = "${tls_private_key.mk77_private_key.public_key_openssh}"
+resource "local_file" "public_key_openssh" {
+  filename = "${local.public_key_file}"
+  content  = "${tls_private_key.mk77-keypair.public_key_openssh}"
+
+  # local_fileでファイルを作ると実行権限が付与されてしまうので、local-execでchmodしておく。
+  provisioner "local-exec" {
+    command = "chmod 600 ${local.public_key_file}"
+  }
+}
+
+# キー名
+output "key_name" {
+  value = "${var.key_name}"
+}
+
+# 秘密鍵ファイルPATH（このファイルを利用してサーバへアクセスする。）
+output "private_key_file" {
+  value = "${local.private_key_file}"
+}
+
+# 秘密鍵内容
+output "private_key_pem" {
+  value = "${tls_private_key.mk77-keypair.private_key_pem}"
+}
+
+# 公開鍵ファイルPATH
+output "public_key_file" {
+  value = "${local.public_key_file}"
+}
+
+# 公開鍵内容（サーバの~/.ssh/authorized_keysに登録して利用する。）
+output "public_key_openssh" {
+  value = "${tls_private_key.mk77-keypair.public_key_openssh}"
 }
 
 # ---------------------------
 # EC2
 # ---------------------------
 # Amazon Linux 2 の最新版AMIを取得
-data "aws_ssm_parameter" "amzn2_win_ami" {
+data "aws_ssm_parameter" "amzn2_win2019_ami" {
   name = "/aws/service/ami-05d5d9a7872d5e73d"
 }
 
