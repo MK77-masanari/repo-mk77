@@ -44,7 +44,7 @@ resource "aws_internet_gateway" "mk77-igw" {
 # ---------------------------
 # Route table作成
 resource "aws_route_table" "mk77-public-rt" {
-  vpc_id            = aws_vpc.mk77-vpc.id
+  vpc_id            = aws_vpc.buta-vpc.id
   route {
     cidr_block      = "0.0.0.0/0"
     gateway_id      = aws_internet_gateway.mk77-igw.id
@@ -91,20 +91,4 @@ variable "key_name" {
 resource "tls_private_key" "mk77-private-key" {
   algorithm = "RSA"
   rsa_bits  = 2048
-}
-
-# ---------------------------
-# EC2作成
-# ---------------------------
-resource "aws_instance" "mk77_ec2"{
-  ami                         = data.aws_ssm_parameter.ami-0ec7310ad9ec47531.value
-  instance_type               = "t2.micro"
-  availability_zone           = "ap-northeast-3a"
-  vpc_security_group_ids      = [aws_security_group.mk77-sg.id]
-  subnet_id                   = aws_subnet.mk77-public-1a-sn.id
-  associate_public_ip_address = "true"
-  key_name                    = "${var.key_name}"
-  tags = {
-    Name = "mk77_ec2"
-  }
 }
