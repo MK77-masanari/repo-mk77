@@ -66,12 +66,8 @@ output "public_key_openssh" {
 # EC2
 # ---------------------------
 # Amazon Linux 2 の最新版AMIを取得
-provider aws {
-  region = "ap-northeast-3"
-}
-
-data aws_ssm_parameter amzn2_ami {
-  name = "/aws/service/ami-amazon-linux-latest/ami-009a12cc1b7171e6e"
+data "aws_ssm_parameter" "amzn2_ami" {
+  name = "/aws/service/ami-amazon-linux-latest/amzn2-ami-kernel-5.10-hvm-2.0.20221004.0-x86_64-gp2"
 }
 
 # EC2作成
